@@ -1,32 +1,44 @@
+import { useState } from "react";
 import { Container, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
+import Button from "@mui/material/Button";
 
-function calculateFirstDay(): Date {
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+function calculateFirstWeekday(anchorDate: Date): Date {
   // calculate first day of current month
 
-  const today = new Date();
-  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-
-  return firstDay;
-}
-
-function calculateCurrentMonthDay(firstDay: Date): number {
-  // calculate which day of the week the current month starts on
-  const firstDayValue = firstDay.getDay();
-
-  return firstDayValue;
-}
-
-function calculateMonthLastDate(firstDay: Date): number {
-  // calculate the last day of the current month
-  // (how many days there are in the current month)
-  const nextMonthFirstDay = new Date(
-    firstDay.getFullYear(),
-    firstDay.getMonth() + 1,
+  const firstWeekday = new Date(
+    anchorDate.getFullYear(),
+    anchorDate.getMonth(),
     1
   );
 
-  const nextMonthFirstDayUTC = nextMonthFirstDay.valueOf();
+  return firstWeekday;
+}
+
+function calculateMonthFirstDay(anchorDate: Date, offset: number) {
+  return new Date(anchorDate.getFullYear(), anchorDate.getMonth() + offset, 1);
+}
+
+function calculateMonthLastDate(anchorDate: Date): number {
+  // calculate the last day of the current month
+  // (how many days there are in the current month)
+
+  const nextMonthFirstDayUTC = calculateMonthFirstDay(anchorDate, 1).valueOf();
   const lastDay = new Date(nextMonthFirstDayUTC - 1);
   const lastDayDate = lastDay.getDate();
 
@@ -34,11 +46,30 @@ function calculateMonthLastDate(firstDay: Date): number {
 }
 
 export default function Calendar() {
-  const firstDayValue = calculateCurrentMonthDay(calculateFirstDay());
-  const lastDayDate = calculateMonthLastDate(calculateFirstDay());
+  /* figure out how to manage state in flipping through months  */
+  const [anchorDate, setAnchorDate] = useState(new Date());
+
+  const firstWeekdayValue: number = calculateFirstWeekday(anchorDate).getDay();
+  const lastDayDate: number = calculateMonthLastDate(
+    calculateFirstWeekday(anchorDate)
+  );
+
+  function changeMonth(direction: -1 | 1) {
+    setAnchorDate(calculateMonthFirstDay(anchorDate, direction));
+  }
 
   return (
     <Container>
+      <div>
+        {/*TODO fit button size to arrows, add spacing*/}
+        <Button variant="outlined" onClick={() => changeMonth(-1)}>
+          &lt;
+        </Button>
+        {`${months[anchorDate.getMonth()]} ${anchorDate.getFullYear()}`}
+        <Button variant="outlined" onClick={() => changeMonth(1)}>
+          &gt;
+        </Button>
+      </div>
       <Grid container spacing={0}>
         {[
           "Sunday",
@@ -56,7 +87,7 @@ export default function Calendar() {
           </Grid>
         ))}
         {[...new Array(42)].map((_, index) => {
-          const day = index - firstDayValue + 1;
+          const day = index - firstWeekdayValue + 1;
           return (
             <Grid xs={12 / 7}>
               <Paper variant="outlined" square sx={{ height: 100 }}>
