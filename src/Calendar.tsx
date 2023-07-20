@@ -80,8 +80,8 @@ export default function Calendar() {
         {[...new Array(42)].map((_, index) => {
           const dayIndex = index - firstWeekdayValue + 1;
           const date = new Date(
-            today.getFullYear(),
-            today.getMonth(),
+            anchorDate.getFullYear(),
+            anchorDate.getMonth(),
             dayIndex
           );
 
