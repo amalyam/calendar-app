@@ -37,17 +37,6 @@ function calculateMonthFirstDay(anchorDate: Date, offset: number) {
   return new Date(anchorDate.getFullYear(), anchorDate.getMonth() + offset, 1);
 }
 
-function calculateMonthLastDate(anchorDate: Date): number {
-  // calculate the last day of the anchorDate month
-  // (how many days there are in the anchorDate month)
-
-  const nextMonthFirstDayUTC = calculateMonthFirstDay(anchorDate, 1).valueOf();
-  const lastDay = new Date(nextMonthFirstDayUTC - 1);
-  const lastDayDate = lastDay.getDate();
-
-  return lastDayDate;
-}
-
 export default function Calendar() {
   const [anchorDate, setAnchorDate] = useState(today);
 
@@ -105,7 +94,12 @@ export default function Calendar() {
                   height: 100,
                   fontWeight:
                     date.valueOf() === today.valueOf() ? "bold" : "normal",
-                  color: date.valueOf() === today.valueOf() ? "blue" : "",
+                  color:
+                    date.valueOf() === today.valueOf()
+                      ? "blue"
+                      : date.getMonth() !== today.getMonth()
+                      ? "grey"
+                      : "",
                 }}
               >
                 {date.getDate()}
