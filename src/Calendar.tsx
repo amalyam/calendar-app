@@ -3,7 +3,8 @@ import { Container, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 
-const today = new Date();
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
 const months = [
   "January",
@@ -37,8 +38,8 @@ function calculateMonthFirstDay(anchorDate: Date, offset: number) {
 }
 
 function calculateMonthLastDate(anchorDate: Date): number {
-  // calculate the last day of the current month
-  // (how many days there are in the current month)
+  // calculate the last day of the anchorDate month
+  // (how many days there are in the anchorDate month)
 
   const nextMonthFirstDayUTC = calculateMonthFirstDay(anchorDate, 1).valueOf();
   const lastDay = new Date(nextMonthFirstDayUTC - 1);
@@ -51,9 +52,6 @@ export default function Calendar() {
   const [anchorDate, setAnchorDate] = useState(today);
 
   const firstWeekdayValue: number = calculateFirstWeekday(anchorDate).getDay();
-  const lastDayDate: number = calculateMonthLastDate(
-    calculateFirstWeekday(anchorDate)
-  );
 
   function changeMonth(direction: -1 | 1) {
     setAnchorDate(calculateMonthFirstDay(anchorDate, direction));
@@ -91,7 +89,13 @@ export default function Calendar() {
           </Grid>
         ))}
         {[...new Array(42)].map((_, index) => {
-          const day = index - firstWeekdayValue + 1;
+          const dayIndex = index - firstWeekdayValue + 1;
+          const date = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            dayIndex
+          );
+
           return (
             <Grid xs={12 / 7}>
               <Paper
@@ -99,11 +103,12 @@ export default function Calendar() {
                 square
                 sx={{
                   height: 100,
-                  fontWeight: day === today.getDate() ? "bold" : "normal",
-                  color: day === today.getDate() ? "blue" : "",
+                  fontWeight:
+                    date.valueOf() === today.valueOf() ? "bold" : "normal",
+                  color: date.valueOf() === today.valueOf() ? "blue" : "",
                 }}
               >
-                {day < 1 || day > lastDayDate ? "" : day}
+                {date.getDate()}
               </Paper>
             </Grid>
           );
