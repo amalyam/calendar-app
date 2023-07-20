@@ -46,7 +46,6 @@ function calculateMonthLastDate(anchorDate: Date): number {
 }
 
 export default function Calendar() {
-  /* figure out how to manage state in flipping through months  */
   const [anchorDate, setAnchorDate] = useState(new Date());
 
   const firstWeekdayValue: number = calculateFirstWeekday(anchorDate).getDay();
@@ -68,6 +67,9 @@ export default function Calendar() {
         {`${months[anchorDate.getMonth()]} ${anchorDate.getFullYear()}`}
         <Button variant="outlined" onClick={() => changeMonth(1)}>
           &gt;
+        </Button>
+        <Button variant="contained" onClick={() => setAnchorDate(new Date())}>
+          Today
         </Button>
       </div>
       <Grid container spacing={0}>
