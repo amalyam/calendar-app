@@ -102,7 +102,11 @@ export default function Calendar() {
                       : "",
                 }}
               >
-                {date.getDate()}
+                {date.getDate() === 1
+                  ? `${date.toLocaleDateString("en-US", {
+                      month: "short",
+                    })} ${date.getDate()}`
+                  : date.getDate()}
               </Paper>
             </Grid>
           );
