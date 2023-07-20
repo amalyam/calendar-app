@@ -3,6 +3,8 @@ import { Container, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 
+const today = new Date();
+
 const months = [
   "January",
   "February",
@@ -46,7 +48,7 @@ function calculateMonthLastDate(anchorDate: Date): number {
 }
 
 export default function Calendar() {
-  const [anchorDate, setAnchorDate] = useState(new Date());
+  const [anchorDate, setAnchorDate] = useState(today);
 
   const firstWeekdayValue: number = calculateFirstWeekday(anchorDate).getDay();
   const lastDayDate: number = calculateMonthLastDate(
@@ -68,7 +70,7 @@ export default function Calendar() {
         <Button variant="outlined" onClick={() => changeMonth(1)}>
           &gt;
         </Button>
-        <Button variant="contained" onClick={() => setAnchorDate(new Date())}>
+        <Button variant="contained" onClick={() => setAnchorDate(today)}>
           Today
         </Button>
       </div>
@@ -92,7 +94,15 @@ export default function Calendar() {
           const day = index - firstWeekdayValue + 1;
           return (
             <Grid xs={12 / 7}>
-              <Paper variant="outlined" square sx={{ height: 100 }}>
+              <Paper
+                variant="outlined"
+                square
+                sx={{
+                  height: 100,
+                  fontWeight: day === today.getDate() ? "bold" : "normal",
+                  color: day === today.getDate() ? "blue" : "",
+                }}
+              >
                 {day < 1 || day > lastDayDate ? "" : day}
               </Paper>
             </Grid>
