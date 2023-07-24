@@ -1,11 +1,15 @@
 import React from "react";
-import Calendar from "./Calendar";
 import "./App.css";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Calendar from "./Calendar";
 
 function App() {
   return (
     <div className="App">
-      <Calendar />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Calendar />
+      </LocalizationProvider>
     </div>
   );
 }
