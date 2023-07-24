@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Container, Paper } from "@mui/material";
+import { Container, Paper, Button, Popper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import Button from "@mui/material/Button";
+import NewEventWindow from "./NewEventWindow";
 
 const now = new Date();
 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -50,6 +50,9 @@ export default function Calendar() {
     <Container>
       <div>
         {/*TODO fit button size to arrows, add spacing*/}
+        <Button variant="contained" onClick={() => setAnchorDate(today)}>
+          Today
+        </Button>
         <Button variant="outlined" onClick={() => changeMonth(-1)}>
           &lt;
         </Button>
@@ -57,9 +60,7 @@ export default function Calendar() {
         <Button variant="outlined" onClick={() => changeMonth(1)}>
           &gt;
         </Button>
-        <Button variant="contained" onClick={() => setAnchorDate(today)}>
-          Today
-        </Button>
+        <NewEventWindow />
       </div>
       <Grid container spacing={0}>
         {[
