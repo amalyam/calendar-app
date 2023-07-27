@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Container, Paper, Button, Popper } from "@mui/material";
+import { Container, Paper, Button } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import NewEventWindow from "./NewEventWindow";
+import dayjs from "dayjs";
 
-const now = new Date();
-const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+/* TODO const [events, changeEvents] = useState({}); <NewEventWindow /> under [+] Button*/
+
+const today = dayjs();
 
 const months = [
   "January",
@@ -21,30 +22,8 @@ const months = [
   "December",
 ];
 
-function calculateFirstWeekday(anchorDate: Date): Date {
-  // calculate first day of current month
-
-  const firstWeekday = new Date(
-    anchorDate.getFullYear(),
-    anchorDate.getMonth(),
-    1
-  );
-
-  return firstWeekday;
-}
-
-function calculateMonthFirstDay(anchorDate: Date, offset: number) {
-  return new Date(anchorDate.getFullYear(), anchorDate.getMonth() + offset, 1);
-}
-
 export default function Calendar() {
-  const [anchorDate, setAnchorDate] = useState(today);
-
-  const firstWeekdayValue: number = calculateFirstWeekday(anchorDate).getDay();
-
-  function changeMonth(direction: -1 | 1) {
-    setAnchorDate(calculateMonthFirstDay(anchorDate, direction));
-  }
+  const [anchorDate, setAnchorDate] = useState(today.startOf("month"));
 
   return (
     <Container>
@@ -53,14 +32,19 @@ export default function Calendar() {
         <Button variant="contained" onClick={() => setAnchorDate(today)}>
           Today
         </Button>
-        <Button variant="outlined" onClick={() => changeMonth(-1)}>
+        <Button
+          variant="outlined"
+          onClick={() => setAnchorDate(anchorDate.subtract(1, "month"))}
+        >
           &lt;
         </Button>
-        {`${months[anchorDate.getMonth()]} ${anchorDate.getFullYear()}`}
-        <Button variant="outlined" onClick={() => changeMonth(1)}>
+        {`${months[anchorDate.month()]} ${anchorDate.year()}`}
+        <Button
+          variant="outlined"
+          onClick={() => setAnchorDate(anchorDate.add(1, "month"))}
+        >
           &gt;
         </Button>
-        <NewEventWindow />
       </div>
       <Grid container spacing={0}>
         {[
@@ -79,12 +63,8 @@ export default function Calendar() {
           </Grid>
         ))}
         {[...new Array(42)].map((_, index) => {
-          const dayIndex = index - firstWeekdayValue + 1;
-          const date = new Date(
-            anchorDate.getFullYear(),
-            anchorDate.getMonth(),
-            dayIndex
-          );
+          const dayIndex = index - anchorDate.day();
+          const date = anchorDate.add(dayIndex, "day");
 
           return (
             <Grid xs={12 / 7}>
@@ -98,16 +78,12 @@ export default function Calendar() {
                   color:
                     date.valueOf() === today.valueOf()
                       ? "blue"
-                      : date.getMonth() !== today.getMonth()
+                      : date.month() !== today.month()
                       ? "grey"
                       : "",
                 }}
               >
-                {date.getDate() === 1
-                  ? `${date.toLocaleDateString("en-US", {
-                      month: "short",
-                    })} ${date.getDate()}`
-                  : date.getDate()}
+                {date.date() === 1 ? date.format("MMM D") : date.date()}
               </Paper>
             </Grid>
           );
