@@ -1,9 +1,18 @@
 import { Dayjs } from "dayjs";
 
 export interface CalendarEventStorage {
-  [year: number]: {
-    [month: number]: {
-      [day: number]: CalendarEvent[];
+  allTimeEvents: CalendarEvent[];
+  events: {
+    [year: number]: {
+      yearEvents: CalendarEvent[];
+      events: {
+        [month: number]: {
+          monthEvents: CalendarEvent[];
+          events: {
+            [day: number]: CalendarEvent[];
+          };
+        };
+      };
     };
   };
 }
