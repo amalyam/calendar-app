@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Popper, Box, Button, TextField, Typography } from "@mui/material";
 import { DateTimeField } from "@mui/x-date-pickers/DateTimeField";
+import { CalendarEvent } from "./CalendarEvent";
 
 /* TODO style popper more clearly*/
 /*All day checkbox*/
@@ -123,7 +124,13 @@ export default function NewEventWindow({
             <Button
               variant="contained"
               onClick={() => {
-                onSave();
+                onSave({
+                  eventName,
+                  startDateTime,
+                  endDateTime,
+                  location,
+                  description,
+                });
                 setAnchorEl(null);
               }}
             >
