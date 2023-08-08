@@ -1,9 +1,21 @@
 import { useState } from "react";
 import { Container, Paper, Button } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import NewEventWindow from "./NewEventWindow";
+import { CalendarEventStorage, CalendarEvent } from "./CalendarEvent";
+import EventRibbon from "./EventRibbon";
+import { palette } from "@mui/system";
+import { sampleEvent1 } from "./sampleCalendarEvent";
 
-/* TODO const [events, changeEvents] = useState({}); <NewEventWindow /> under [+] Button*/
+/* TODO
+create function in onSave() that adds newEvent to CalendarEventStorage
+fit button size to icons, add spacing
+
+create util function to generate sample events
+
+finish filling out mock data, try to render
+*/
 
 const today = dayjs();
 
@@ -22,13 +34,29 @@ const months = [
   "December",
 ];
 
+function hasEventsOnDay(
+  date: Dayjs,
+  calendar: CalendarEventStorage
+): CalendarEvent[] | null {
+  if (calendar.events[date.year()]) {
+    const yearEvents = calendar.events[date.year()];
+    if (yearEvents.events[date.month()]) {
+      const monthEvents = yearEvents.events[date.month()];
+      if (monthEvents.events[date.day()]) {
+        return monthEvents.events[date.day()];
+      }
+    }
+  }
+  return null;
+}
+
 export default function Calendar() {
   const [anchorDate, setAnchorDate] = useState(today.startOf("month"));
+  const [events, changeEvents] = useState<CalendarEventStorage>(sampleEvent1);
 
   return (
     <Container>
       <div>
-        {/*TODO fit button size to arrows, add spacing*/}
         <Button variant="contained" onClick={() => setAnchorDate(today)}>
           Today
         </Button>
@@ -45,6 +73,7 @@ export default function Calendar() {
         >
           &gt;
         </Button>
+        <NewEventWindow onSave={(event) => window.alert(event)} />
       </div>
       <Grid container spacing={0}>
         {[
@@ -66,8 +95,10 @@ export default function Calendar() {
           const dayIndex = index - anchorDate.day();
           const date = anchorDate.add(dayIndex, "day");
 
+          const eventsOnDay = hasEventsOnDay(date, events);
+
           return (
-            <Grid xs={12 / 7}>
+            <Grid key={index} xs={12 / 7}>
               <Paper
                 variant="outlined"
                 square
@@ -78,12 +109,16 @@ export default function Calendar() {
                   color:
                     date.valueOf() === today.valueOf()
                       ? "blue"
-                      : date.month() !== today.month()
+                      : date.month() !== anchorDate.month()
                       ? "grey"
                       : "",
                 }}
               >
-                {date.date() === 1 ? date.format("MMM D") : date.date()}
+                <>
+                  {date.date() === 1 ? date.format("MMM D") : date.date()}
+                  {}
+                  {eventsOnDay ? <EventRibbon eventList={eventsOnDay} /> : ""}
+                </>
               </Paper>
             </Grid>
           );
