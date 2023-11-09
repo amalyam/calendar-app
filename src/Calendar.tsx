@@ -48,7 +48,9 @@ function hasEventsOnDay(
 
 export default function Calendar() {
   const [anchorDate, setAnchorDate] = useState(today.startOf("month"));
-  const [events, changeEvents] = useState<CalendarEventStorage>(sampleEvent1);
+  const [storage, changeStorage] = useState<CalendarEventStorage>(
+    new CalendarEventStorage()
+  );
 
   return (
     <Container>
@@ -91,7 +93,10 @@ export default function Calendar() {
           const dayIndex = index - anchorDate.day();
           const date = anchorDate.add(dayIndex, "day");
 
-          const eventsOnDay = hasEventsOnDay(date, events);
+          const allTimeEvents = storage.getAllTimeEvents();
+          const yearEvents = storage.getYearEvents(date);
+          const monthEvents = storage.getMonthEvents(date);
+          const dayEvents = storage.getEventsOnDate(date);
 
           return (
             <Grid key={index} xs={12 / 7}>
