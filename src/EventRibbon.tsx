@@ -1,19 +1,33 @@
 import { Box } from "@mui/system";
-import { CalendarEvent } from "./CalendarEvent";
 
 export default function EventRibbon({
-  eventList = [],
+  eventName,
+  index,
 }: {
-  eventList: CalendarEvent[];
+  eventName: string;
+  index: number;
 }) {
   /* TODO return a different ribbon for each event in the eventList 
     - map over all events, creating a new Box component for each one
   */
 
-  const eventRibbons = eventList.map((event, index) => (
-    <Box key={index} sx={{ bgcolor: "blue", color: "white", p: 4 }}>
-      {event.eventName}
+  return (
+    <Box
+      key={index}
+      sx={{
+        bgcolor: "blue",
+        color: "white",
+        p: 1,
+        mt: 1,
+        borderRadius: "4px",
+        fontSize: "0.8rem",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        textAlign: "left",
+      }}
+    >
+      {eventName}
     </Box>
-  ));
-  return <>{eventRibbons}</>;
+  );
 }
