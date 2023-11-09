@@ -30,20 +30,10 @@ const months = [
   "December",
 ];
 
-function hasEventsOnDay(
-  date: Dayjs,
-  calendar: CalendarEventStorage
-): CalendarEvent[] | null {
-  if (calendar.events[date.year()]) {
-    const yearEvents = calendar.events[date.year()];
-    if (yearEvents.events[date.month()]) {
-      const monthEvents = yearEvents.events[date.month()];
-      if (monthEvents.events[date.day()]) {
-        return monthEvents.events[date.day()];
-      }
-    }
-  }
-  return null;
+function generateEventRibbons(eventList: CalendarEvent[]) {
+  return eventList.map((event, index) => (
+    <EventRibbon eventName={event.eventName} index={index} />
+  ));
 }
 
 export default function Calendar() {
