@@ -9,12 +9,7 @@ import { palette } from "@mui/system";
 import { sampleEvent1 } from "./sampleCalendarEvent";
 
 /* TODO
-create function in onSave() that adds newEvent to CalendarEventStorage
-fit button size to icons, add spacing
-
-create util function to generate sample events
-
-finish filling out mock data, try to render
+generateMultiDayEventRibbons() helper func
 */
 
 const today = dayjs();
