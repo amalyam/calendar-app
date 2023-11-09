@@ -110,8 +110,25 @@ export default function Calendar() {
               >
                 <>
                   {date.date() === 1 ? date.format("MMM D") : date.date()}
-                  {}
-                  {eventsOnDay ? <EventRibbon eventList={eventsOnDay} /> : ""}
+                  {allTimeEvents ? generateEventRibbons(allTimeEvents) : ""}
+                  {yearEvents ? generateEventRibbons(yearEvents) : ""}
+                  {monthEvents.map((event, index) => {
+                    if (
+                      date >= event.startDateTime &&
+                      date <= event.endDateTime
+                    ) {
+                      return (
+                        <EventRibbon
+                          eventName={event.eventName}
+                          index={index}
+                        />
+                      );
+                    }
+                    return null;
+                  })}
+                  {dayEvents.map((event, index) => (
+                    <EventRibbon eventName={event.eventName} index={index} />
+                  ))}
                 </>
               </Paper>
             </Grid>
