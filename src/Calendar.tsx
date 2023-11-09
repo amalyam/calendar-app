@@ -45,7 +45,10 @@ export default function Calendar() {
   return (
     <Container>
       <div>
-        <Button variant="contained" onClick={() => setAnchorDate(today)}>
+        <Button
+          variant="contained"
+          onClick={() => setAnchorDate(today.startOf("month"))}
+        >
           Today
         </Button>
         <Button
