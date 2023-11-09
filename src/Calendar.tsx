@@ -6,8 +6,6 @@ import NewEventWindow from "./NewEventWindow";
 import { CalendarEvent } from "./CalendarEvent";
 import CalendarEventStorage from "./CalendarEventStorage";
 import EventRibbon from "./EventRibbon";
-import { palette } from "@mui/system";
-import { sampleEvent1 } from "./sampleCalendarEvent";
 
 /* TODO
 generateMultiDayEventRibbons() helper func
